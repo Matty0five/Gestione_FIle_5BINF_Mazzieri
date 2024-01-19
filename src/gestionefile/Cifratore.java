@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class Cifratore {
     private Matrice matrice;
     private ArrayList<Vigenere> quadranti = new ArrayList<Vigenere>();
-    private String verme;
     
     public Cifratore(String verme){
     this.matrice = new Matrice(verme);
