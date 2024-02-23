@@ -36,15 +36,14 @@ public class Scrittore implements Runnable{
         
         try {
             //1) apro il file
-            br = new BufferedWriter(
-                    new FileWriter(nomeFile));
+            br = new BufferedWriter(new FileWriter(nomeFile));
             //2) scrivo nel buffer
             br.write(username);
             br.write(";");
             br.write(password);
             br.write("\n\r");
             //3) svuoto il buffer e salvo nel file i dati
-            br.flush();         
+            br.flush();
         } catch (IOException ex) {
             Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);
         }
