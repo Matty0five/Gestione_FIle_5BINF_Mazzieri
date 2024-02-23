@@ -44,6 +44,8 @@ public class GestioneFile {
         Scrittore scrittore = new Scrittore("C:\\Users\\matte\\OneDrive\\Scuola superiore\\Quinto anno\\TPSIT\\Progetti\\Gestione file\\output.csv", username, cifratore.cifra(password));
         Thread threadScrittore = new Thread(scrittore);
         threadScrittore.start();
+
+        // Prova
     }
     
 }
