@@ -20,7 +20,8 @@ public class Lettore extends Thread{
      * Legge il file senza tener conto del tipo di file
      * e lo mostra in output
      */
-    public void leggi(){
+    public String leggi(boolean stampa){
+        String contenuto = "";
         FileReader fr;
         int i; 
         try { 
@@ -28,7 +29,7 @@ public class Lettore extends Thread{
             fr = new FileReader(nomeFile);
             //2) leggo carattere per carattere e lo stampo 
             while ((i=fr.read()) != -1)
-                System.out.print((char) i);
+                contenuto += (char) i;
             
             System.out.print("\n\r");
             //3) chiudo il file
@@ -36,10 +37,17 @@ public class Lettore extends Thread{
         } catch (IOException ex) {
             System.err.println("Errore in lettura!");
         }
+
+        if(stampa){
+            System.out.println(contenuto);
+            return "";
+        }else{
+            return contenuto;
+        }
     }
     
 
     public void run(){
-        leggi();
+        leggi(true);
     }
 }
