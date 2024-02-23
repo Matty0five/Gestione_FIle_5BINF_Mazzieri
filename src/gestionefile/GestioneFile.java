@@ -44,8 +44,27 @@ public class GestioneFile {
         Scrittore scrittore = new Scrittore(".\\output.csv", username, cifratore.cifra(password));
         Thread threadScrittore = new Thread(scrittore);
         threadScrittore.start();
-
-        // Prova
+        try{
+            threadScrittore.join();
+        } catch (InterruptedException ex) {
+            System.err.println("Errore in lettura" + ex.getMessage());
+        }
+        
+        //4) COPIA
+        lettore = new Lettore(".\\output.csv");
+        String output = lettore.leggi(false);
+        String[] output_diviso = output.split(";"); // Dato che sappiamo la struttura del csv, possiamo "scomporlo"...
+        String username_copiato = output_diviso[0];
+        String password_copiata = output_diviso[1];
+        Scrittore copiatore = new Scrittore(".\\copia.csv", username_copiato, password_copiata); // ...e ricomporlo
+        
+        Thread threadCopiatore = new Thread(copiatore);
+        threadCopiatore.start();
+        try{
+            threadCopiatore.join();
+        } catch (InterruptedException ex) {
+            System.err.println("Errore in lettura" + ex.getMessage());
+        }
     }
     
 }
