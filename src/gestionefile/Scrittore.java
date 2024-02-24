@@ -1,20 +1,15 @@
 package gestionefile;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-
 /**
  *
  * @author Matteo Mazzieri
  * @version 19/01/24
  */
-
 public class Scrittore implements Runnable{
-
     String nomeFile;
     String username;
     String password;
@@ -33,16 +28,30 @@ public class Scrittore implements Runnable{
      * Scrive un file di testo usando la classe BufferedWriter
      */
     public void scrivi(){
-        
-        try(DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFile)))){
+        BufferedWriter br=null;
 
+        try {
+            //1) apro il file
+            br = new BufferedWriter(new FileWriter(nomeFile));
             //2) scrivo nel buffer
-            dos.writeUTF(username);
-            dos.writeUTF(";");
-            dos.writeUTF(password);
-            
+            br.write(username);
+            br.write(";");
+            br.write(password);
+            br.write("\n\r");
+            //3) svuoto il buffer e salvo nel file i dati
+            br.flush();
         } catch (IOException ex) {
             Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (br!=null)
+                try {
+                    //4)chiudo lo stream in uscita
+                    br.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
     }
 }

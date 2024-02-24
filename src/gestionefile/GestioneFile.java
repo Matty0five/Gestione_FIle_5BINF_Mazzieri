@@ -52,7 +52,7 @@ public class GestioneFile {
         
         //4) COPIA
         lettore = new Lettore(".\\output.csv");
-        String output = lettore.leggiCSV(false);
+        String output = lettore.leggi(false);
         String[] output_diviso = output.split(";"); // Dato che sappiamo la struttura del csv, possiamo "scomporlo"...
         String username_copiato = output_diviso[0];
         String password_copiata = output_diviso[1];
