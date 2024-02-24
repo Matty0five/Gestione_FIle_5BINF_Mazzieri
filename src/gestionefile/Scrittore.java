@@ -1,10 +1,11 @@
 package gestionefile;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 
 /**
  *
@@ -33,13 +34,12 @@ public class Scrittore implements Runnable{
      */
     public void scrivi(){
         
-        try(BufferedWriter br = new BufferedWriter(new FileWriter(nomeFile))){
+        try(DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFile)))){
 
             //2) scrivo nel buffer
-            br.write(username);
-            br.write(";");
-            br.write(password);
-            br.write("\n\r");
+            dos.writeUTF(username);
+            dos.writeUTF(";");
+            dos.writeUTF(password);
             
         } catch (IOException ex) {
             Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);

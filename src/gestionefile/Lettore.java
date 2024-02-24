@@ -2,6 +2,10 @@ package gestionefile;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.EOFException;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 
 /**
  *
@@ -20,7 +24,7 @@ public class Lettore extends Thread{
      * Legge il file senza tener conto del tipo di file
      * e lo mostra in output
      */
-    public String leggi(boolean stampa){
+    public String leggiJSON(boolean stampa){
         String contenuto = "";
         int i; 
         try(FileReader fr = new FileReader(nomeFile)){
@@ -42,8 +46,32 @@ public class Lettore extends Thread{
         }
     }
     
+    public String leggiCSV(boolean stampa){
+        String contenuto = "";
+        
+        try(DataInputStream lettore = new DataInputStream(new BufferedInputStream(new FileInputStream(nomeFile)))){
+
+            //2) leggo ogni riga fino alla fine del file
+            while (true){
+                contenuto += lettore.readUTF();
+            }
+            
+        } catch (EOFException eof) {
+            // - Raggiunta la fine del file -
+        } catch (IOException ioe) {
+            System.err.println("Errore in lettura!");
+        }
+
+        if(stampa){
+            System.out.println(contenuto);
+            return "";
+        }else{
+            return contenuto;
+        }
+    }
+    
 
     public void run(){
-        leggi(true);
+        leggiJSON(true);
     }
 }
