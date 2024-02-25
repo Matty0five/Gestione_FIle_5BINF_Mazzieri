@@ -111,6 +111,18 @@ public class GestioneFile {
         } catch (InterruptedException ex) {
             System.err.println("Errore in lettura" + ex.getMessage());
         }
+
+        //7) CREO L'OGGETTO USER E LO ESPORTO
+
+        User utente1 = new User(Integer.parseInt(dati_utente[0]), dati_utente[1], dati_utente[2], dati_utente[3]);
+        utente1.esporta(".\\user.txt");
+        System.out.println("Dati dell'utente esportati");
+
+        //8) IMPORTO L'UTENTE
+
+        User utente2 = new User(".\\user.txt");
+        System.out.println("Dati dell'utente importati: ");
+        System.out.print(utente2.toString());
     }
     
 }
