@@ -17,6 +17,7 @@ public class GestioneFile {
     public static void main(String[] args) {
         
         //1)LETTURA
+
         Lettore lettore = new Lettore(".\\user.json");
         lettore.start();
         try{
@@ -24,6 +25,7 @@ public class GestioneFile {
         } catch (InterruptedException ex) {
             System.err.println("Errore in lettura" + ex.getMessage());
         }
+
         //2)ELABORAZIONE
 
         String username = null;
@@ -38,10 +40,14 @@ public class GestioneFile {
             System.err.println("Errore durante la lettura dell'input: " + e.getMessage());
         }
 
-        Cifratore cifratore=new Cifratore("VERME");
+        Cifratore cifratore = new Cifratore("VERME");
         
         //3) SCRITTURA
-        Scrittore scrittore = new Scrittore(".\\output.csv", username, cifratore.cifra(password));
+
+        String[] dati_di_accesso = new String[2];
+        dati_di_accesso[0] = username;
+        dati_di_accesso[1] = cifratore.cifra(password);
+        Scrittore scrittore = new Scrittore(".\\output.csv", dati_di_accesso);
         Thread threadScrittore = new Thread(scrittore);
         threadScrittore.start();
         try{
@@ -51,17 +57,57 @@ public class GestioneFile {
         }
         
         //4) COPIA
+
         lettore = new Lettore(".\\output.csv");
         String output = lettore.leggi(false);
         String[] output_diviso = output.split(";"); // Dato che sappiamo la struttura del csv, possiamo "scomporlo"...
-        String username_copiato = output_diviso[0];
-        String password_copiata = output_diviso[1];
-        Scrittore copiatore = new Scrittore(".\\copia.csv", username_copiato, password_copiata); // ...e ricomporlo
+        Scrittore copiatore = new Scrittore(".\\copia.csv", output_diviso); // ...e ricomporlo
         
         Thread threadCopiatore = new Thread(copiatore);
         threadCopiatore.start();
         try{
             threadCopiatore.join();
+        } catch (InterruptedException ex) {
+            System.err.println("Errore in lettura" + ex.getMessage());
+        }
+
+        //5) SCRITTURA DI USER.CSV
+        
+        String[] dati_utente = new String[4];
+        
+        try {
+            System.out.print("Inserisci l'id: ");
+            dati_utente[0] = br.readLine();
+            System.out.print("Inserisci il tuo nome: ");
+            dati_utente[1] = br.readLine();
+            System.out.print("Inserisci il tuo cognome: ");
+            dati_utente[2] = br.readLine();
+            System.out.print("Inserisci il tuo ruolo: ");
+            dati_utente[3] = br.readLine();
+        } catch (IOException e) {
+            System.err.println("Errore durante la lettura dell'input: " + e.getMessage());
+        }
+
+        System.out.println("");
+        
+        Scrittore scrittore_utente = new Scrittore(".\\user.csv", dati_utente);
+        Thread threadScrittoreDatiUtente = new Thread(scrittore_utente);
+        threadScrittoreDatiUtente.start();
+        try{
+            threadScrittoreDatiUtente.join();
+        } catch (InterruptedException ex) {
+            System.err.println("Errore in lettura" + ex.getMessage());
+        }
+
+        //6) LEGGO I DATI DI USER.CSV
+        
+        System.out.println("Dati letti da user.csv:\n");
+
+        lettore = new Lettore(".\\user.csv");
+        lettore.setType(true); // setto la lettura alla lettura binaria piuttosto che quella per carattere
+        lettore.start();
+        try{
+            lettore.join();
         } catch (InterruptedException ex) {
             System.err.println("Errore in lettura" + ex.getMessage());
         }

@@ -2,6 +2,10 @@ package gestionefile;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.FileInputStream;
 
 /**
  *
@@ -11,6 +15,7 @@ import java.io.IOException;
 
 public class Lettore extends Thread{
     String nomeFile;
+    boolean binario = false;
     
     public Lettore(String nomeFile){
         this.nomeFile = nomeFile;
@@ -41,9 +46,34 @@ public class Lettore extends Thread{
             return contenuto;
         }
     }
+
+    public String leggiUtente(boolean stampa){
+
+        try(DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(nomeFile)))){
+
+            String[] line;
+            while(true){
+                line = dis.readUTF().split(";");
+                System.out.print(line[0]+": "+line[1]);
+            }
+
+        } catch (EOFException eof){
+            // Raggiunta la fine del file //
+        } catch (IOException ioe){
+            System.err.println("Errore in lettura: " + ioe.getMessage());
+        }
+        return "";
+    }
     
 
     public void run(){
-        leggi(true);
+        if(binario)
+            leggiUtente(true);
+        else
+            leggi(true);
+    }
+
+    public void setType(boolean type){
+        this.binario = type;
     }
 }

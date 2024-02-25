@@ -1,9 +1,13 @@
 package gestionefile;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+
 /**
  *
  * @author Matteo Mazzieri
@@ -11,47 +15,57 @@ import java.util.logging.Logger;
  */
 public class Scrittore implements Runnable{
     String nomeFile;
-    String username;
-    String password;
+    String[] dati_da_scrivere;
     
-    public Scrittore(String nomeFile, String username, String password){
+    public Scrittore(String nomeFile, String[] dati_da_scrivere){
         this.nomeFile = nomeFile;
-        this.username = username;
-        this.password = password;
+        this.dati_da_scrivere = dati_da_scrivere;
     }
     
     @Override
     public void run() {
-        scrivi();
+        if(dati_da_scrivere.length == 2)
+            scrivi();
+        else if(dati_da_scrivere.length == 4)
+            scriviDatiUtenteCSV();
     }
     /**
      * Scrive un file di testo usando la classe BufferedWriter
      */
     public void scrivi(){
-        BufferedWriter br=null;
 
-        try {
-            //1) apro il file
-            br = new BufferedWriter(new FileWriter(nomeFile));
+        try(BufferedWriter br = new BufferedWriter(new FileWriter(nomeFile))){
             //2) scrivo nel buffer
-            br.write(username);
+            br.write(dati_da_scrivere[0]);
             br.write(";");
-            br.write(password);
+            br.write(dati_da_scrivere[1]);
             br.write("\n\r");
-            //3) svuoto il buffer e salvo nel file i dati
-            br.flush();
         } catch (IOException ex) {
             Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);
         }
-        finally{
-            if (br!=null)
-                try {
-                    //4)chiudo lo stream in uscita
-                    br.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    }
 
+    public void scriviDatiUtenteCSV(){
+        String[] struttura = {
+            "id",
+            "name",
+            "surname",
+            "role"
+        };
+
+        try(DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFile)))){
+
+            int i = 0;
+            String line = "";
+            for(String dato : dati_da_scrivere){
+                line = struttura[i] + ";" + dato + "\n";
+                dos.writeUTF(line);
+                i++;
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }
