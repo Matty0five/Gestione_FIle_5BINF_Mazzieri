@@ -1,4 +1,3 @@
-
 package gestionefile;
 
 import java.util.ArrayList;
@@ -6,7 +5,7 @@ import java.util.ArrayList;
 /**
  *
  * @author Matteo Mazzieri
- * @version 19/01/24
+ * 
  */
 
 public class Cifratore {

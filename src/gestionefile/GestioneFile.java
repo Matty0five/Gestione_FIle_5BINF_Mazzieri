@@ -7,13 +7,18 @@ import java.io.InputStreamReader;
 /**
  *
  * @author Matteo Mazzieri
- * @version 19/01/24
+ * 
  */
+
 public class GestioneFile {
 
     /**
+     * 
+     * Programma suddiviso in fasi in base alle ISSUE.
      * @param args the command line arguments
+     * 
      */
+
     public static void main(String[] args) {
         
         //1)LETTURA

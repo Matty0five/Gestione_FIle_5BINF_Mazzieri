@@ -1,4 +1,5 @@
 package gestionefile;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -11,29 +12,34 @@ import java.io.FileOutputStream;
 /**
  *
  * @author Matteo Mazzieri
- * @version 19/01/24
+ * 
  */
+
 public class Scrittore implements Runnable{
     String nomeFile;
     String[] dati_da_scrivere;
+
+    /**
+     * 
+     * Crea un oggetto scrittore.
+     * @param nomeFile Percorso del file da scrivere.
+     * @param dati_da_scrivere Array che contiene i dati da scrivere.
+     * 
+     */
     
     public Scrittore(String nomeFile, String[] dati_da_scrivere){
         this.nomeFile = nomeFile;
         this.dati_da_scrivere = dati_da_scrivere;
     }
     
-    @Override
-    public void run() {
-        if(dati_da_scrivere.length == 2)
-            scrivi();
-        else if(dati_da_scrivere.length == 4)
-            scriviDatiUtenteCSV();
-    }
     /**
-     * Scrive un file di testo usando la classe BufferedWriter
+     * 
+     * Scrive username e password in formato csv su output.csv.
+     * 
      */
-    public void scrivi(){
 
+    public void scrivi(){
+        
         try(BufferedWriter br = new BufferedWriter(new FileWriter(nomeFile))){
             //2) scrivo nel buffer
             br.write(dati_da_scrivere[0]);
@@ -45,6 +51,13 @@ public class Scrittore implements Runnable{
         }
     }
 
+    /**
+     * 
+     * Usa la classe DataOutputStream per scrivere le informazioni
+     * di un utente in un file in formato csv.
+     * 
+     */
+    
     public void scriviDatiUtenteCSV(){
         String[] struttura = {
             "id",
@@ -52,9 +65,9 @@ public class Scrittore implements Runnable{
             "surname",
             "role"
         };
-
+        
         try(DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFile)))){
-
+            
             int i = 0;
             String line = "";
             for(String dato : dati_da_scrivere){
@@ -66,6 +79,14 @@ public class Scrittore implements Runnable{
         } catch (IOException ex) {
             Logger.getLogger(Scrittore.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @Override
+    public void run() {
+        if(dati_da_scrivere.length == 2)
+            scrivi();
+        else if(dati_da_scrivere.length == 4)
+            scriviDatiUtenteCSV();
     }
 
 }

@@ -10,43 +10,62 @@ import java.io.FileInputStream;
 /**
  *
  * @author Matteo Mazzieri
- * @version 19/01/24
+ * 
  */
 
 public class Lettore extends Thread{
     String nomeFile;
     boolean binario = false;
+
+    /**
+     * 
+     * Crea un oggetto lettore.
+     * @param nomeFile Percorso del file da leggere.
+     * 
+     */
     
     public Lettore(String nomeFile){
         this.nomeFile = nomeFile;
     }
     
     /**
-     * Legge il file senza tener conto del tipo di file
-     * e lo mostra in output
+     * 
+     * Legge un file a prescindere dal tipo.
+     * @param stampa Determina se l'output della lettura del file deve essere mostrato su console.
+     * @return Il contenuto del file.
+     * 
      */
+
     public String leggi(boolean stampa){
         String contenuto = "";
         int i; 
         try(FileReader fr = new FileReader(nomeFile)){
-
+            
             //2) leggo carattere per carattere e lo stampo 
             while ((i=fr.read()) != -1)
                 contenuto += (char) i;
+                
+                System.out.print("\n\r");
+            } catch (IOException ex) {
+                System.err.println("Errore in lettura!");
+            }
             
-            System.out.print("\n\r");
-        } catch (IOException ex) {
-            System.err.println("Errore in lettura!");
-        }
-
-        if(stampa){
-            System.out.println(contenuto);
-            return "";
+            if(stampa){
+                System.out.println(contenuto);
+                return "";
         }else{
             return contenuto;
         }
     }
-
+    
+    /**
+     * 
+     * Legge i dati dell'utente da un file scritto con DataOutputStream.
+     * @param stampa Determina se l'output della lettura del file deve essere mostrato su console.
+     * @return I dati dell'utente contenuti nel file.
+     * 
+     */
+    
     public String leggiUtente(boolean stampa){
 
         try(DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(nomeFile)))){
@@ -64,8 +83,19 @@ public class Lettore extends Thread{
         }
         return "";
     }
-    
 
+    /**
+     * 
+     * Imposta il tipo di lettura che deve essere effettuata.
+     * @param type Definisce il tipo di lettura.
+     * 
+     */
+
+    public void setType(boolean type){
+        this.binario = type;
+    }
+    
+    @Override
     public void run(){
         if(binario)
             leggiUtente(true);
@@ -73,7 +103,4 @@ public class Lettore extends Thread{
             leggi(true);
     }
 
-    public void setType(boolean type){
-        this.binario = type;
-    }
 }

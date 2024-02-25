@@ -1,10 +1,9 @@
-
 package gestionefile;
 
 /**
  *
  * @author Matteo Mazzieri
- * @version 19/01/24
+ * 
  */
 
 public class Matrice {
